@@ -19,13 +19,13 @@ window.Vue = require('vue');
 // Dialog
 //-----------------------------------------------------------------------------
 Vue.component("InputShippingDialog"    , require('./dialogs/InputShippingDialog.vue').default)
-Vue.component("CreateShippingDialog"   , require('./dialogs/CreateShippingDialog.vue').default)
+// Vue.component("CreateShippingDialog"   , require('./dialogs/CreateShippingDialog.vue').default)
 Vue.component("CustomerSearchDialog"   , require('./dialogs/CustomerSearchDialog.vue').default)
 Vue.component("DeliverySearchDialog"   , require('./dialogs/DeliverySearchDialog.vue').default)
 Vue.component("DriverSearchDialog"     , require('./dialogs/DriverSearchDialog.vue').default)
 Vue.component("SupplierSearchDialog"   , require('./dialogs/SupplierSearchDialog.vue').default)
 Vue.component("WarehouseSearchDialog"  , require('./dialogs/WarehouseSearchDialog.vue').default)
-Vue.component("DuplicateShippingDialog", require('./dialogs/DuplicateShippingDialog.vue').default)
+// Vue.component("DuplicateShippingDialog", require('./dialogs/DuplicateShippingDialog.vue').default)
 Vue.component("ItemSearchDialog"       , require('./dialogs/ItemSearchDialog.vue').default)
 Vue.component("OfficeSearchDialog"       , require('./dialogs/OfficeSearchDialog.vue').default)
 //-----------------------------------------------------------------------------
