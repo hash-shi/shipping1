@@ -17,6 +17,8 @@ use App\Models\itemsTransfer;
 use App\Models\offices;
 use App\Models\places;
 use App\Models\remarks;
+use App\Models\sid;
+use App\Models\sih;
 use App\Models\suppliers;
 use App\Models\users;
 use App\Models\warehouses;
@@ -40,7 +42,8 @@ class MasterController extends Controller
 	// 
 	//-------------------------------------------------------------------------
 	public function getConfig(Request $request){
-		return configures::whereNotNull('ID')->get();
+		// return configures::whereNotNull('ID')->get();
+		return json_decode(json_encode(configures::whereNotNull('ID')->get()), true);
 	}
 
 	//-------------------------------------------------------------------------

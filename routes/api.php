@@ -60,6 +60,7 @@ Route::post('shipping/exis'                                     , "App\Http\Cont
 // Route::post('shipping/copy'                                     , "App\Http\Controllers\api\ShippingController@copy");
 Route::post('shipping/susp'                                     , "App\Http\Controllers\api\ShippingController@susp");
 Route::post('shipping/conf'                                     , "App\Http\Controllers\api\ShippingController@conf");
+Route::post('shipping/comp'                                     , "App\Http\Controllers\api\ShippingController@comp");
 Route::delete('shipping/{orderNo}'                              , "App\Http\Controllers\api\ShippingController@del");
 
 // Route::post("deliveries"                                        , "App\Http\Controllers\api\ShippingController@getDeliveries");

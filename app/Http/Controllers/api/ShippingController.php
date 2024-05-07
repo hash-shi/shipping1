@@ -49,7 +49,8 @@ class ShippingController extends Controller
 		//---------------------------------------------------------------------
 		// 出荷日(From 一ヵ月前の一日、現在日付)
 		//---------------------------------------------------------------------
-		$searchShipDateFrom = date("Y-m-d",strtotime("first day of -1 month"));
+		$searchShipDateFrom = date("Y-m-d",strtotime("first day of -24 month"));
+		// $searchShipDateFrom = date("Y-m-d");
 		$searchShipDateTo   = date("Y-m-d");
 
 		//---------------------------------------------------------------------
@@ -152,7 +153,7 @@ class ShippingController extends Controller
 		$query->selectRaw('STATUS.id as status');
 		$query->selectRaw('STATUS.name as label');
 		$query->selectRaw('ISNULL(SIH.count,0) as count');
-		$query->orderBy('STATUS.id');
+		$query->orderBy('STATUS.order');
 
 		// 検索結果
 		$orderNos = $query->get();
@@ -283,6 +284,7 @@ class ShippingController extends Controller
 
 		// 並び順
 		$querySih->selectRaw('S.*');
+		$querySih->orderBy('ORDER_NO', 'desc');
 
 		// var_dump($querySih->toSql());
 
@@ -324,108 +326,17 @@ class ShippingController extends Controller
 		// 返却
 		return $deliveries;
 	}
-
-	// //-------------------------------------------------------------------------
-	// // 得意先と納入先に紐づく商品一覧の取得
-	// // ただし、納入先が存在しない場合もある
-	// // 
-	// //-------------------------------------------------------------------------
-	// public function getItemsCustomer(Request $request){
-
-	//     $searchCustomerCode     = $request->input("searchCustomerCode");
-	//     $searchDeliveryCode     = $request->input("searchDeliveryCode");
-
-	//     // //---------------------------------------------------------------------
-	//     // // 納入先が無い場合もある
-	//     // //---------------------------------------------------------------------
-	//     // if ($deliveryCode == "NULL"){
-	//     //     $deliveryCode = null;
-	//     // }
-
-	//     // //数値以外が入力されていたら納品先をないことにする
-	//     // if(preg_match('/[^0-9]/',$deliveryCode)){
-	//     //     $deliveryCode = null;
-	//     // }
-
-	//     // 検索条件の組み立て
-	//     $query = items::query();
-	//     $query->select('CODE', 'NAME');
-
-	//     // サブクエリ
-	//     if(($customerCode != null && $customerCode !="") || ($deliveryCode != null && $deliveryCode !="") ) {
-	//         $query->whereIn('CODE', function($queryItemsC) use($customerCode, $deliveryCode) {
-	//             $queryItemsC->from('ITEMS_CUSTOMER');
-	//             $queryItemsC->select('ITEM_CODE');
-	//             if($customerCode != null && $customerCode !="") {
-	//                 $queryItemsC->where('CUSTOMER_CODE', $customerCode);
-	//             }
-	//             if($deliveryCode != null && $deliveryCode !="") {
-	//                 $queryItemsC->where('DELIVERY_CODE', $deliveryCode);
-	//             }
-	//         });
-	//     }
-
-	//     // 並び順
-	//     $query->orderBy('CODE', 'asc');
-	//     // 検索結果
-	//     $items = $query->get();
-	//     // 返却
-	//     return $items;
-	// }
-
-	// //-------------------------------------------------------------------------
-	// // 仕入先に紐づく商品一覧の取得
-	// // 
-	// // 
-	// //-------------------------------------------------------------------------
-	// public function getItemsSupplier(Request $request){
-		
-	//     $supplierCode         = $request->input("supplierCode");
-
-	//     // 検索条件の組み立て
-	//     $query = items::query();
-	//     $query->select('CODE', 'NAME');
-
-	//     if($supplierCode != null && $supplierCode) {
-	//         $query->whereIn('CODE', itemsSupplier::select('ITEM_CODE')->where('SUPPLIER_CODE', $supplierCode));
-	//     }
-
-	//     // 並び順
-	//     $query->orderBy('CODE', 'asc');
-	//     // 検索結果
-	//     $items = $query->get();
-	//     // 返却
-	//     return $items;
-
-	// }
-
+	
 	//-------------------------------------------------------------------------
 	// レコードの存在確認
 	// 
 	// 
 	//-------------------------------------------------------------------------
 	public function exis(Request $request){
-
-		$result = false;
-
 		// 受注Noを取得する
 		$ORDER_NO = $request->input("ORDER_NO");
-
-		//---------------------------------------------------------------------
-		// 存在チェック
-		//---------------------------------------------------------------------
-		if ($ORDER_NO != null && $ORDER_NO != "") {
-			if (sih::where("ORDER_NO", $ORDER_NO)->exists()) {
-				$result = true;
-			} else {
-				$result = false;
-			}
-		}
-
-		//---------------------------------------------------------------------
-		// 結果返却
-		//---------------------------------------------------------------------
-		return $result;
+		// チェックそのものはvalidat側で行うので、ここでは何もしない。
+		return sprintf('%06d', $ORDER_NO);
 	}
 
 	//-------------------------------------------------------------------------
@@ -453,10 +364,12 @@ class ShippingController extends Controller
 		$sihRecord = null;
 		// 出荷指示明細
 		$sidRecords = array();
-
 		// 定数マスタ
-		$configures = json_decode(json_encode(configures::whereNotNull('ID')->get()), true);
-		
+		$common = new MasterController;
+
+		$configures = $common->getConfig($request);
+		// dump($configures);
+
 		// 営業所コード
 		$officeCode = $configures[array_search('OFFICE_CODE', array_column($configures, 'ID'))]['VALUE'];
 
@@ -475,7 +388,6 @@ class ShippingController extends Controller
 			// 更新
 			$isNew = false;
 			// ヘッダー
-			//$sihRecord = sih::where('ORDER_NO', $orderNo)->first();
 			$sihRecord = ProjectCommon::syncRelation('\App\Models\sih', ProjectCommon::getRelation('App\Models\sih', sih::where('ORDER_NO', $orderNo))->first());
 
 			if ($sihRecord['ORDER_TIME'] != null && $sihRecord['ORDER_TIME'] != "") {
@@ -510,17 +422,16 @@ class ShippingController extends Controller
 			if ($orderNoBase !== "") {
 				// 複写
 				// 基となるレコードに上書き
-				// $sihRecord = sih::where('ORDER_NO', $orderNoBase)->first();
 				$sihRecord = ProjectCommon::syncRelation('\App\Models\sih', ProjectCommon::getRelation('App\Models\sih', sih::where('ORDER_NO', $orderNoBase))->first());
 
 				// 個別の設定値
-				$sihRecord['DELIVERY_DATE'] = null;
+				// $sihRecord['DELIVERY_DATE'] = null;
 				// $sihRecord['LOADING_RATE']  = '1';
 			} else {
 				// 新規
 				foreach ($sihColumns as $column) { $sihRecord[$column] = null;}
 				// 個別の設定値
-				$sihRecord['DELIVERY_DATE'] = date('Y-m-d');
+				// $sihRecord['DELIVERY_DATE'] = date('Y-m-d');
 				$sihRecord['LOADING_RATE']  = '1';
 			}
 
@@ -537,6 +448,7 @@ class ShippingController extends Controller
 			$sihRecord['ORDER_DATE']        = null;
 			$sihRecord['ORDER_TIME']        = null;
 			$sihRecord['SHIP_DATE']         = $shipDate;
+			$sihRecord['DELIVERY_DATE'] 		= $shipDate;
 			$sihRecord['DELIVERY_AMPM']     = '3';
 			$sihRecord['DELIVERY_TIME']     = null;
 			$sihRecord['ORDER_USER']        = $userCode;
@@ -608,12 +520,15 @@ class ShippingController extends Controller
 	// 
 	//-------------------------------------------------------------------------
 	public function susp(Request $request){
-		$this->regist($request, false);
+		return $this->regist($request, 0);
 	}
 	public function conf(Request $request){
-		$this->regist($request, true);
+		return $this->regist($request, 1);
 	}
-	public function regist(Request $request, $isComp){
+	public function comp(Request $request){
+		return $this->regist($request, 2);
+	}
+	public function regist(Request $request, $isStatus){
 
 		//---------------------------------------------------------------------
 		// リクエスト取得
@@ -636,11 +551,13 @@ class ShippingController extends Controller
 		$sihRecord['ADD_FEE']=$sihRecord['ADD_FEE']!= null ? (int)str_replace( ',', '', $sihRecord['ADD_FEE'] ):null;     
 		$sihRecord['HIGHWAY_FEE']=$sihRecord['HIGHWAY_FEE'] != null ? (int)str_replace( ',', '', $sihRecord['HIGHWAY_FEE'] ):null;
 
-		if ($isComp) {
-			// 確定系の設定
-			// 1:確定
-			$sihRecord['STATUS'] = '1';
-			// 確定時間
+		if ($isStatus == 0) {
+			// 0:未確定/一時保存
+			$sihRecord['STATUS'] = $isStatus;
+		} else if ($isStatus == 1) {
+			// 1:入力確定
+			$sihRecord['STATUS'] = $isStatus;
+			// 入力確定日時
 			$sihRecord['CONFIRM_DATE'] = date('Y-m-d H:i');
 			// 確定回数の更新
 			$confirmCount = 0;
@@ -648,6 +565,14 @@ class ShippingController extends Controller
 				$confirmCount = $sihRecord['CONFIRM_COUNT'];
 			}
 			$sihRecord['CONFIRM_COUNT'] = (intval($confirmCount) + 1);
+		} else if ($isStatus == 3) {
+			// 3.端数完了
+			$sihRecord['STATUS'] = $isStatus;
+		} else if ($isStatus == 2) {
+			// 2:出荷完了
+			$sihRecord['STATUS'] = $isStatus;
+			// 出荷完了日
+			$sihRecord['COMPLETION_DATE'] = date('Y-m-d H:i');
 		}
 
 		//---------------------------------------------------------------------
@@ -685,6 +610,10 @@ class ShippingController extends Controller
 			//---------------------------------------------------------------------
 			DB::rollback();
 		}
+
+		return array(
+			"ORDER_NO" => $orderNo,
+		);
 	}
 
 	//-------------------------------------------------------------------------
@@ -737,7 +666,8 @@ class ShippingController extends Controller
 	// 
 	// 
 	//-------------------------------------------------------------------------
-	public function del(Request $request, $orderNo){
+	public function del(Request $request){
+		$sihId = $request->input("orderNo");
 		SIH::where('ORDER_NO', $orderNo)->delete();
 		SID::where('ORDER_NO', $orderNo)->delete();
 	}
@@ -766,11 +696,9 @@ class ShippingController extends Controller
 		]);
 
 		// ヘッダーの取得
-		// $sihRecord = sih::where('ORDER_NO', $orderNo)->first();
 		$sihRecord = ProjectCommon::syncRelation('\App\Models\sih', ProjectCommon::getRelation('App\Models\sih', sih::where('ORDER_NO', $orderNo))->first());
 
 		// 明細の取得
-		// $sidRecords = sid::where('ORDER_NO', $orderNo)->get();
 		$sidRecords = ProjectCommon::syncRelation('\App\Models\sid', ProjectCommon::getRelation('App\Models\sid', sid::where('ORDER_NO', $orderNo))->get());
 
 		//日付系のフォーマット修正
@@ -791,7 +719,8 @@ class ShippingController extends Controller
 		$html_data = file_get_contents('.\Template\instruction.html');
 
 		// 置換実行
-		$html_data = preg_replace('/_confirmCount_/',   $sihRecord['CONFIRM_COUNT'],    $html_data);
+		// $html_data = preg_replace('/_confirmCount_/',   $sihRecord['CONFIRM_COUNT'],    $html_data);
+		$html_data = preg_replace('/_printCount_/',   $sihRecord['PRINT_COUNT'],    $html_data);
 
 		$html_data = preg_replace('/_orderNo_/',        $sihRecord['ORDER_NO'],         $html_data);
 		$html_data = preg_replace('/_orderYear_/',      mb_substr($orderDate, 0, 4),    $html_data);

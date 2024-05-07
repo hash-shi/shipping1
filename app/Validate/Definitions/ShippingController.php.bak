@@ -2,7 +2,6 @@
 namespace App\Validate\Definitions;
 use App\Models\deliveries;
 use App\Models\warehouses;
-use App\Models\sih;
 use App\Validate\Base\ValidateDefinitionsBase;
 
 class ShippingController extends ValidateDefinitionsBase {
@@ -63,7 +62,8 @@ class ShippingController extends ValidateDefinitionsBase {
 			'sidRecords.*.QTY_CTN'         => ['required_with:sidRecords.*.ITEM_CODE'],
 		],
 		"exis" => [
-			'ORDER_NO'                     => ['required', 'numeric', 'min:1', 'max:999998'],
+			'ORDER_NO'                     => ['required', 'size:6', 'regex:/^[0-9]+$/'],
+			'SHIP_DATE'                    => ['required'],
 		],
 	);
 
@@ -128,26 +128,13 @@ class ShippingController extends ValidateDefinitionsBase {
 		if ($action == "exis") {
 			$this->ORDER_NO = $request->input('ORDER_NO');
 			$rules  = $this->add($rules, ['ORDER_NO' => function($attribute, $value, $fail) {
-				// exists = 存在して入ればtrue はあるが not existsがないので手組する。
-				$ORDER_NO = sprintf('%06d', $this->ORDER_NO);
-				if (0 < sih::where('ORDER_NO', $ORDER_NO)->count()) {
-					$fail(':attribute' . ':' . $ORDER_NO . 'が存在しています。');
+				if ($this->ORDER_NO == "000000") {
+					$fail(':attributeに000000は指定できません。');
+				}
+				if ($this->ORDER_NO == "999999") {
+					$fail(':attributeに999999は指定できません。');
 				}
 			}]);
-		}
-
-		if ($action == "susp" || $action == "conf" || $action == "comp") {
-			$isNew = $request->input('isNew');
-			if ($isNew) {
-				$this->sihRecord = $request->input('sihRecord');
-				$rules  = $this->add($rules, ['sihRecord.ORDER_NO' => function($attribute, $value, $fail) {
-					// exists = 存在して入ればtrue はあるが not existsがないので手組する。
-					$ORDER_NO = sprintf('%06d', $this->sihRecord["ORDER_NO"]);
-					if (0 < sih::where('ORDER_NO', $ORDER_NO)->count()) {
-						$fail(':attribute' . ':' . $ORDER_NO . 'が存在しています。');
-					}
-				}]);
-			}
 		}
 
 		if ($action == "susp" || $action == "conf") {
@@ -168,7 +155,7 @@ class ShippingController extends ValidateDefinitionsBase {
 					}
 				}
 			}]);
-
+			
 			// 登録時に入力済み明細が0行の場合エラー
 			$this->sidRecords = $request->input('sidRecords');
 			$rules  = $this->add($rules, ['sihRecord.ORDER_NO' => function($attribute, $value, $fail) {

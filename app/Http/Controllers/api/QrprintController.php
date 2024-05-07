@@ -83,8 +83,11 @@ class QrprintController extends Controller
 
         $query = calendar::query();
         $query->where('CDATE', $printDate);
-        if ($query->value('LOTSEQ') != null) {
-            $lotSeq = $query->value('LOTSEQ');
+        $record = $query->first();
+        if ($record != null) {
+            if ($record["LOTSEQ"] != null && $record["LOTSEQ"] != "") {
+                $lotSeq = $record["LOTSEQ"];
+            }
         }
         
         return $lotSeq;
