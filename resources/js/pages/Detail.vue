@@ -601,7 +601,9 @@ export default {
       // var sihId = response.data.SIH_ID;
       var orderNo = response.data.ORDER_NO;
       alert("保存しました。" + "\r\n" + "受注No：" + orderNo);
-      this.init(orderNo, "", "", "", "");
+      this.$nextTick(() => {
+        this.init(orderNo, "", "", "", "");
+      });
     });
     }
   },
@@ -612,13 +614,15 @@ export default {
     await axios.post("/api/shipping/conf", {
       'isNew'   : this.isNew,
       'sihRecord' : this.sihRecord,
-      'sidRecords': this.sidRecords
+      'sidRecords': this.sidRecords,
     }).then(response => {
       // var sihId = response.data.SIH_ID;
       var orderNo = response.data.ORDER_NO;
       alert("確定しました。" + "\r\n" + "受注No：" + orderNo);
-      // this.init(sihId, orderNo, "", "", "", "");
-      router.push("/?isBack=true");
+      this.$nextTick(() => {
+        this.init(sihId, orderNo, "", "", "", "");
+        // router.push("/?isBack=true");
+      });
     });
     }
   },
@@ -629,13 +633,15 @@ export default {
     await axios.post("/api/shipping/comp", {
       'isNew'   : this.isNew,
       'sihRecord' : this.sihRecord,
-      'sidRecords': this.sidRecords
+      'sidRecords': this.sidRecords,
     }).then(response => {
       // var sihId = response.data.SIH_ID;
       var orderNo = response.data.ORDER_NO;
       alert("完了しました。" + "\r\n" + "受注No：" + orderNo);
-      // this.init(sihId, orderNo, "", "", "", "");
-      router.push("/?isBack=true");
+      this.$nextTick(() => {
+        this.init(sihId, orderNo, "", "", "", "");
+        // router.push("/?isBack=true");
+      });
     });
     }
   },
@@ -647,40 +653,48 @@ export default {
       data : { 'orderNo': this.sihRecord["ORDER_NO"] }
     }).then(response => {
       alert("削除しました。");
-      router.push("/?isBack=true");
+      this.$nextTick(() => {
+        router.push("/?isBack=true");
+      });
     });
     }
   },
 
   // 指示書入力
   instructionPrint: async function(){
-    await axios.post("/api/shipping/conf", {
+    await axios.post("/api/shipping/inst", {
       'isNew'   : this.isNew,
       'sihRecord' : this.sihRecord,
-      'sidRecords': this.sidRecords
+      'sidRecords': this.sidRecords,
     })
     .then(response => {
       // var sihId = response.data.SIH_ID;
       var orderNo = response.data.ORDER_NO;
-      window.open("/shipping/instructionPrint/" + orderNo);
-      // this.init(sihId, orderNo, "", "", "", "");
-      router.push("/?isBack=true");
+      const printWindow = window.open("/shipping/instructionPrint/" + orderNo);
+      // 再描画のタイミングズレの吸収
+      this.$nextTick(() => {
+        this.init(sihId, orderNo, "", "", "", "");
+        // router.push("/?isBack=true");
+      });
     });
   },
 
   // 伝票印刷
   slipPrint: async function(){
-    await axios.post("/api/shipping/conf", {
+    await axios.post("/api/shipping/vouc", {
       'isNew'   : this.isNew,
       'sihRecord' : this.sihRecord,
-      'sidRecords': this.sidRecords
+      'sidRecords': this.sidRecords,
     })
     .then(response => {
       // var sihId = response.data.SIH_ID;
       var orderNo = response.data.ORDER_NO;
-      window.open("/shipping/slipPrint/" + orderNo);
-      // this.init(sihId, orderNo, "", "", "", "");
-      router.push("/?isBack=true");
+      const printWindow = window.open("/shipping/slipPrint/" + orderNo);
+      // 再描画のタイミングズレの吸収
+      this.$nextTick(() => {
+        this.init(sihId, orderNo, "", "", "", "");
+        // router.push("/?isBack=true");
+      });
     });
   },
 

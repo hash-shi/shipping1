@@ -21,6 +21,7 @@ use App\Models\hcodesH;
 use App\Models\itemsSupplier;
 use mikehaertl\wkhtmlto\Pdf;
 use DB;
+
 class ShippingController extends Controller
 {
 	//-------------------------------------------------------------------------
@@ -520,15 +521,21 @@ class ShippingController extends Controller
 	// 
 	//-------------------------------------------------------------------------
 	public function susp(Request $request){
-		return $this->regist($request, 0);
+		return $this->regist($request, 0, 'susp');
 	}
 	public function conf(Request $request){
-		return $this->regist($request, 1);
+		return $this->regist($request, 1, 'conf');
+	}
+	public function inst(Request $request){
+		return $this->regist($request, 1, 'inst');
+	}
+	public function vouc(Request $request){
+		return $this->regist($request, 1, 'vouc');
 	}
 	public function comp(Request $request){
-		return $this->regist($request, 2);
+		return $this->regist($request, 2, 'comp');
 	}
-	public function regist(Request $request, $isStatus){
+	public function regist(Request $request, $isStatus, $isMethod){
 
 		//---------------------------------------------------------------------
 		// リクエスト取得
@@ -559,12 +566,31 @@ class ShippingController extends Controller
 			$sihRecord['STATUS'] = $isStatus;
 			// 入力確定日時
 			$sihRecord['CONFIRM_DATE'] = date('Y-m-d H:i');
+
 			// 確定回数の更新
 			$confirmCount = 0;
-			if ($sihRecord['CONFIRM_COUNT'] != null) {
-				$confirmCount = $sihRecord['CONFIRM_COUNT'];
+			if ($sihRecord['CONFIRM_COUNT'] != null) { $confirmCount = $sihRecord['CONFIRM_COUNT']; }
+			// 初回or確定時のみ
+			if ($confirmCount == 0 || $isMethod == 'conf') {
+				$sihRecord['CONFIRM_COUNT'] = (intval($confirmCount) + 1);
 			}
-			$sihRecord['CONFIRM_COUNT'] = (intval($confirmCount) + 1);
+
+			// 指示書印刷回数の更新
+			if ($isMethod == 'inst') {
+				$printCount = 0;
+				if ($sihRecord['PRINT_COUNT'] != null) { $printCount = $sihRecord['PRINT_COUNT']; }
+				$sihRecord['PRINT_COUNT'] = (intval($printCount) + 1);
+				$sihRecord['PRINT_DATE'] = date('Y-m-d H:i:s');
+			}
+
+			// 伝票印刷回数の更新
+			if ($isMethod == 'vouc') {
+				$printCount2 = 0;
+				if ($sihRecord['PRINT2_COUNT'] != null) { $printCount2 = $sihRecord['PRINT2_COUNT']; }
+				$sihRecord['PRINT2_COUNT'] = (intval($printCount2) + 1);
+				$sihRecord['PRINT2_DATE'] = date('Y-m-d H:i:s');
+			}
+
 		} else if ($isStatus == 3) {
 			// 3.端数完了
 			$sihRecord['STATUS'] = $isStatus;
@@ -667,7 +693,7 @@ class ShippingController extends Controller
 	// 
 	//-------------------------------------------------------------------------
 	public function del(Request $request){
-		$sihId = $request->input("orderNo");
+		$orderNo = $request->input("orderNo");
 		SIH::where('ORDER_NO', $orderNo)->delete();
 		SID::where('ORDER_NO', $orderNo)->delete();
 	}
@@ -679,21 +705,21 @@ class ShippingController extends Controller
 	//-------------------------------------------------------------------------
 	public function instructionPrint(Request $request, $orderNo){
 	
-		// 印刷日付、印刷回数の更新
-		$sihRecord = sih::where('ORDER_NO', $orderNo)->first();
+		// // 印刷日付、印刷回数の更新
+		// $sihRecord = sih::where('ORDER_NO', $orderNo)->first();
 
-		// 印刷回数の取得
-		$printConut = 0;
-		if ($sihRecord['PRINT_COUNT'] != null) {
-			$printConut = $sihRecord['PRINT_COUNT'];
-		}
-		$printConut = (intval($printConut) + 1);
+		// // 印刷回数の取得
+		// $printConut = 0;
+		// if ($sihRecord['PRINT_COUNT'] != null) {
+		// 	$printConut = $sihRecord['PRINT_COUNT'];
+		// }
+		// $printConut = (intval($printConut) + 1);
 
-		// 更新
-		sih::where('ORDER_NO', $orderNo)->update([
-			'PRINT_DATE'    => date('Y-m-d H:i:s'),
-			'PRINT_COUNT'   => $printConut,
-		]);
+		// // 更新
+		// sih::where('ORDER_NO', $orderNo)->update([
+		// 	'PRINT_DATE'    => date('Y-m-d H:i:s'),
+		// 	'PRINT_COUNT'   => $printConut,
+		// ]);
 
 		// ヘッダーの取得
 		$sihRecord = ProjectCommon::syncRelation('\App\Models\sih', ProjectCommon::getRelation('App\Models\sih', sih::where('ORDER_NO', $orderNo))->first());
@@ -923,21 +949,21 @@ class ShippingController extends Controller
 	//-------------------------------------------------------------------------
 	public  function slipPrint(Request $request, $orderNo){
 	 
-		// 印刷日付、印刷回数の更新
-		$sihRecord = sih::where('ORDER_NO', $orderNo)->first();
+		// // 印刷日付、印刷回数の更新
+		// $sihRecord = sih::where('ORDER_NO', $orderNo)->first();
 
-		// 印刷回数の取得
-		$print2Conut = 0;
-		if ($sihRecord['PRINT2_COUNT'] != null) {
-			$print2Conut = $sihRecord['PRINT2_COUNT'];
-		}
-		$print2Conut = (intval($print2Conut) + 1);
+		// // 印刷回数の取得
+		// $print2Conut = 0;
+		// if ($sihRecord['PRINT2_COUNT'] != null) {
+		// 	$print2Conut = $sihRecord['PRINT2_COUNT'];
+		// }
+		// $print2Conut = (intval($print2Conut) + 1);
 
-		// 更新
-		sih::where('ORDER_NO', $orderNo)->update([
-			'PRINT2_DATE'    => date('Y-m-d H:i:s'),
-			'PRINT2_COUNT'   => $print2Conut,
-		]);
+		// // 更新
+		// sih::where('ORDER_NO', $orderNo)->update([
+		// 	'PRINT2_DATE'    => date('Y-m-d H:i:s'),
+		// 	'PRINT2_COUNT'   => $print2Conut,
+		// ]);
 
 		// ヘッダーの取得
 		$sihRecord = sih::where('ORDER_NO', $orderNo)->first();
@@ -958,7 +984,8 @@ class ShippingController extends Controller
 		$html_data = preg_replace('/_shipYear_/',       mb_substr($shipDate,0,4),       $html_data);
 		$html_data = preg_replace('/_shipMonth_/',      mb_substr($shipDate,5,2),       $html_data);
 		$html_data = preg_replace('/_shipDay_/',        mb_substr($shipDate,8,2),       $html_data);
-		$html_data = preg_replace('/_confirmCount_/',   $sihRecord['CONFIRM_COUNT'],    $html_data);
+		// $html_data = preg_replace('/_confirmCount_/',   $sihRecord['CONFIRM_COUNT'],    $html_data);
+		$html_data = preg_replace('/_print2Count_/',    $sihRecord['PRINT2_COUNT'],     $html_data);
 		$html_data = preg_replace('/_deliveryYear_/',   mb_substr($deliveryDate,0,4),   $html_data);
 		$html_data = preg_replace('/_deliveryMonth_/',  mb_substr($deliveryDate,5,2),   $html_data);
 		$html_data = preg_replace('/_deliveryDay_/',    mb_substr($deliveryDate,8,2),   $html_data);

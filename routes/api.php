@@ -61,7 +61,9 @@ Route::post('shipping/exis'                                     , "App\Http\Cont
 Route::post('shipping/susp'                                     , "App\Http\Controllers\api\ShippingController@susp");
 Route::post('shipping/conf'                                     , "App\Http\Controllers\api\ShippingController@conf");
 Route::post('shipping/comp'                                     , "App\Http\Controllers\api\ShippingController@comp");
-Route::delete('shipping/{orderNo}'                              , "App\Http\Controllers\api\ShippingController@del");
+Route::post('shipping/inst'                                     , "App\Http\Controllers\api\ShippingController@inst");
+Route::post('shipping/vouc'                                     , "App\Http\Controllers\api\ShippingController@vouc");
+Route::delete('shipping'                                        , "App\Http\Controllers\api\ShippingController@del");
 
 // Route::post("deliveries"                                        , "App\Http\Controllers\api\ShippingController@getDeliveries");
 // Route::post("itemsCustomer"                                     , "App\Http\Controllers\api\ShippingController@getItemsCustomer");
@@ -70,7 +72,7 @@ Route::delete('shipping/{orderNo}'                              , "App\Http\Cont
 
 //QRコード印刷
 Route::get('qrPrintInit'                                   , "App\Http\Controllers\api\QrprintController@qrPrintInit");
-Route::post('getQrHistoryData            '                 , "App\Http\Controllers\api\QrprintController@getQrHistoryData");
+Route::post('getQrHistoryData'                             , "App\Http\Controllers\api\QrprintController@getQrHistoryData");
 Route::post('serialNumberChange'                           , "App\Http\Controllers\api\QrprintController@serialNumberChange");
 
 Route::post('qrPrint/regist'                               , "App\Http\Controllers\api\QrprintController@regist");
