@@ -5,18 +5,17 @@
       <meta charset="utf-8"/>
     </head>
     <body>
+      <div :inert="inert">
       <div>
-        <input type="button" value="ラベル印刷" id="printButton" v-on:click="qrPrint" v-if ='this.printDate != "" && (this.supplierCode != "" || this.warehouseCode != "") && this.itemCode != null && this.qtyPer != "" && this.pattern != "" && this.numSheet != ""'>
-        <input v-else type="button" value="ラベル印刷" disabled>
-
-        <pre></pre>
+          <input type="button" value="ラベル印刷" id="printButton"  v-bind:disabled="this.printDate == '' || (this.supplierCode == '' && this.warehouseCode == '') || this.itemCode == '' || this.qtyPer == '' || this.pattern == '' || this.numSheet == ''"  v-on:click="qrPrint" :ref="'printButton'" @keyup.enter="moveToNextField('printButton')">
+          <pre></pre>
 
         <div class="tv">
           <div class="title">
             年月日
           </div>
           <div class="value">
-            <input type="date" name="" value="2021-03-09" id="printDate" v-model="printDate" max="9999-12-31" v-on:change="printDateChange()">
+              <input type="date" name="" value="2021-03-09" id="printDate" v-model="printDate" max="9999-12-31" v-on:change="printDateChange();" :ref="'printDate'" @keyup.enter="moveToNextField('printDate')">
             　　　　　　連番：{{ serialNumberSlice(lotSeq) }}
           </div>
         </div>
@@ -27,12 +26,12 @@
             仕入先
           </div>
           <div class="value">
-            <input type="text" size="16" name="" value="" list="suppliers" v-model="supplierCode" v-on:change="supplierChange()" v-bind:disabled="this.warehouseCode != '' && this.warehouseCode != null">
+              <input type="text" autocomplete="off" size="16" name="" value="" list="suppliers" v-model="supplierCode" v-on:change="supplierChange();" v-bind:disabled="this.warehouseCode != '' && this.warehouseCode != null" :ref="'supplierCode'" @keyup.enter="moveToNextField('supplierCode')">
             <datalist id="suppliers">
               <option v-for="suppliers in mstSuppliers" :key="suppliers.CODE" :value="suppliers.CODE">{{ suppliers.CODE }}:{{ suppliers.NAME }}</option>
             </datalist>
             <font-awesome-icon icon="times"  style="cursor:pointer;" v-on:click="supplierCode='';supplierChange();" />
-            <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="opneSupplierSearchDialog()" />
+              <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="opneDialog('SupplierSearch');" />
             <input type="text" disabled v-model="supplierName">
           </div>
         </div>
@@ -43,12 +42,12 @@
             倉庫
           </div>
           <div class="value">
-            <input type="text" size="16" name="" value="" list="warehouses" v-model="warehouseCode" v-on:change="warehousesChange()" v-bind:disabled="this.supplierCode != '' && this.supplierCode != null">
+              <input type="text" autocomplete="off" size="16" name="" value="" list="warehouses" v-model="warehouseCode" v-on:change="warehousesChange();" v-bind:disabled="this.supplierCode != '' && this.supplierCode != null" :ref="'warehouseCode'" @keyup.enter="moveToNextField('warehouseCode')">
             <datalist id="warehouses">
               <option v-for="warehouses in mstWarehouses" :key="warehouses.CODE" :value="warehouses.CODE">{{ warehouses.CODE }}:{{ warehouses.NAME }}</option>
             </datalist>
             <font-awesome-icon icon="times"  style="cursor:pointer;" v-on:click="warehouseCode='';warehousesChange();" />
-            <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="opneWarehouseSearchDialog()" />
+              <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="opneDialog('WarehouseSearch');" />
             <input type="text" disabled v-model="warehouseName">
           </div>
         </div>
@@ -59,12 +58,12 @@
             商品
           </div>
           <div class="value">
-            <input type="text" size="16" name="" value="" list="items" v-model="itemCode" v-on:change="itemChange()" id="item">
+              <input type="text" autocomplete="off" size="16" name="" value="" list="items" v-model="itemCode" v-on:change="itemChange();" id="item" :ref="'itemCode'" @keyup.enter="moveToNextField('itemCode')">
             <datalist id="items">
               <option v-for="item in mstItem" :key="item.CODE" :value="item.CODE">{{ item.CODE }}:{{ item.NAME }}</option>
             </datalist>
             <font-awesome-icon icon="times"  style="cursor:pointer;" v-on:click="itemCode='';itemChange();" />
-            <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="opneItemSearchDialog()" />
+              <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="opneDialog('ItemSearch');" />
             <input type="text" disabled v-model="itemName">
           </div>
         </div>
@@ -76,7 +75,7 @@
             入数
           </div>
           <div class="value">
-            <input type="text" size="16" name="" value="" v-model="qtyPer" v-on:change="qtyPerChange()" id="qtyPer">
+              <input type="text" autocomplete="off" size="16" name="" value="" v-model="qtyPer" v-on:change="qtyPerChange();" id="qtyPer" :ref="'qtyPer'" @keyup.enter="moveToNextField('qtyPer')">
             <font-awesome-icon icon="times" v-on:click="qtyPer='';" style="cursor:pointer;" />
           </div>
         </div>
@@ -89,7 +88,7 @@
           </div>
           <div class="value">
             <!-- <input type="text" size="16" name="" value="" v-model="pattern" v-on:change="" id="pattern" v-bind:disabled="this.supplierName == '' || this.supplierName == null "> -->
-            <select v-model="pattern" class="w170">
+              <select v-model="pattern" class="w170" :ref="'pattern'" @keyup.enter="moveToNextField('pattern')">
               <option value=""></option>
               <option v-for="pattern in patterns" :key="pattern.key" v-bind:value="pattern.value">
                 {{ pattern.value }}
@@ -106,7 +105,7 @@
             発行枚数
           </div>
           <div class="value">
-            <input type="text" size="16" name="" v-model="numSheet" id="numSheet" maxLength=3 v-on:change="numSheet=changeNumber(numSheet)">
+              <input type="text" autocomplete="off" size="16" name="" v-model="numSheet" id="numSheet" maxLength=3 v-on:change="numSheet=changeNumber(numSheet);setNextField();" :ref="'numSheet'" @keyup.enter="moveToNextField('numSheet')">
             <font-awesome-icon icon="times" v-on:click="numSheet='';" style="cursor:pointer;" />
           </div>
         </div>
@@ -118,16 +117,16 @@
             開始位置
           </div>
           <div class="value">
-            <input type="text" size="16" name="" v-model="startNum" id="startNum" maxLength=2 v-on:change="startNum=changeNumber(startNum)">
-            <font-awesome-icon icon="times" v-on:click="startNum='';" style="cursor:pointer;" />
+              <input type="text" autocomplete="off"size="16" name="" v-model="startNum" id="startNum" maxLength=2 v-on:change="startNum=changeNumber(startNum);setNextField();" :ref="'startNum'" @keyup.enter="moveToNextField('startNum')">
+              <font-awesome-icon icon="times" v-on:click="startNum='';" style="cursor:pointer;" />
+            </div>
           </div>
         </div>
-      </div>
-      <br />
+        <br />
 
-      <table class="searchResult">
-        <tr><th>ラベル発行履歴</th></tr>
-      </table>
+        <div>
+          <tr><th>ラベル発行履歴</th></tr>
+        </div>
       {{ ((pageNow - 1) * pageDataCount) + (pageResults.length > 0 ? 1:0) }}件 から {{ ((pageNow - 1) * pageDataCount) + pageResults.length }}件 までを表示（全 {{ qrRecords.length }} 件）
       <br />
 
@@ -142,12 +141,12 @@
       </ul>
       <br />
 
-      <input type="button" value="再発行" id="printButtonRe" v-on:click="qrPrintRe" v-if ='this.qrRecords != null && this.qrRecords.length!=0'>
-      <input v-else type="button" value="再発行" disabled>
-      <table class="searchResult">
-        <tr>
-          
-          <th class="w80">
+        <input type="button" value="再発行" id="printButtonRe" v-on:click="qrPrintRe" v-bind:disabled="this.qrRecords == null || this.qrRecords.length==0" :ref="'printButtonRe'" @keyup.enter="moveToNextField('printButtonRe')">
+        <div class="searchResult">
+          <table class="searchRecord">
+            <thead>
+              <tr>
+                <th class="w80">
             再発行
           </th>
           <th class="w120">
@@ -190,10 +189,11 @@
           <th class="w80">
             形態
           </th>
-        </tr>
-        <tr v-for="(pageResult, index) of this.pageResults" :key="index">
-
-          <td style="text-align: center;">
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(pageResult, index) of this.pageResults" :key="index">
+                <td style="text-align: center;">
             <input type="checkbox" name="check" v-model="pageResult.PRINT_FLG">
           </td>
           <td style="text-align: center;">
@@ -219,16 +219,18 @@
           </td>
           <td style="text-align: center;">
             {{ pageResult.PATTERN }}
-          </td>
-
-        </tr>
-      </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       <!-- 仕入先 -->
-      <SupplierSearchDialog   v-if="showSupplierSearchDialog"  :officeCode="this.officeCode" :hCode="null" @close="closeSupplierSearchDialog"  @select="selectSupplierDialog"  ></SupplierSearchDialog>
+      <SupplierSearchDialog   v-if="this.showDialog.SupplierSearch"  :officeCode="this.officeCode" :hCode="null" @close="closeDialog('SupplierSearch')"  @select="selectSupplierDialog"  ></SupplierSearchDialog>
       <!-- 倉庫 -->
-      <WarehouseSearchDialog  v-if="showWarehouseSearchDialog" :officeCode="this.officeCode" :hCode="null" @close="closeWarehouseSearchDialog" @select="selectWarehouseDialog" ></WarehouseSearchDialog>
+      <WarehouseSearchDialog  v-if="this.showDialog.WarehouseSearch" :officeCode="this.officeCode" :hCode="null" @close="closeDialog('WarehouseSearch')" @select="selectWarehouseDialog" ></WarehouseSearchDialog>
       <!-- 商品 -->
-      <ItemSearchDialog       v-if="showItemSearchDialog"      :searchHcode="this.hCode" :searchCustomerCode="null" :searchDeliveryCode="null" :searchSupplierCode="this.supplierCode" @close="closeItemSearchDialog" @select="selectItemDialog" ></ItemSearchDialog>
+      <ItemSearchDialog       v-if="this.showDialog.ItemSearch"      :searchHcode="this.hCode" :searchCustomerCode="null" :searchDeliveryCode="null" :searchSupplierCode="this.supplierCode" @close="closeDialog('ItemSearch')" @select="selectItemDialog" ></ItemSearchDialog>
     </body>
   </html>
 </template>
@@ -248,7 +250,7 @@ export default {
   },
 
   mounted: async function(){
-    await axios.get("/api/qrPrintInit").then(response =>{
+    await axios.get("/api/qrPrint").then(response =>{
       this.printDate            = response.data.printDate;
       this.numSheet             = response.data.numSheet;
       this.officeCode           = response.data.officeCode;
@@ -273,16 +275,27 @@ export default {
       this.mstItem = response.data;
     });
 
+    // Enter移動の設定をする
+    this.setNextField();
+    // 初期フォーカスの設定
+    this.$nextTick(() => this.moveToNextField("printButtonRe"));
+
   },
 
   data() {
     return {
 
-      // ダイアログ表示フラグ
-      showSupplierSearchDialog: false,                // 仕入先検索ダイアログの表示・非表示管理フラグ
-      showWarehouseSearchDialog: false,               // 倉庫検索ダイアログの表示・非表示管理フラグ
-      showItemSearchDialog: false,                    // 商品検索ダイアログの表示・非表示管理フラグ
+			// 画面ロック
+			inert: false,   // 初期値の設定
 
+			// ダイアログ表示フラグ
+			showDialog: {
+				"SupplierSearch": false,
+				"WarehouseSearch": false,               // 倉庫検索ダイアログの表示・非表示管理フラグ
+				"ItemSearch": false,                    // 商品検索ダイアログの表示・非表示管理フラグ
+			},
+
+      officeCode: "",
       printDate : "",
       lotSeq:"",                //日付連番
 
@@ -336,19 +349,150 @@ export default {
 
   methods: {
 
-    //ダイアログ表示
-    opneSupplierSearchDialog:function ()          { this.showSupplierSearchDialog = true; },
-    closeSupplierSearchDialog:function ()         { this.showSupplierSearchDialog = false; },
-    opneWarehouseSearchDialog:function ()         { this.showWarehouseSearchDialog = true; },
-    closeWarehouseSearchDialog:function ()        { this.showWarehouseSearchDialog = false; },
-    opneItemSearchDialog:function ()              { this.showItemSearchDialog = true; },
-    closeItemSearchDialog:function ()             { this.showItemSearchDialog = false; },
+		//-------------------------------------------------------------------------
+		// ダイアログのオープンクローズ
+		//-------------------------------------------------------------------------
+		setInert:function(value) { this.inert = value; },
+		opneDialog:function (dialog) {
+			this.setInert(true);
+			this.showDialog[dialog] = true;
+		},
+		closeDialog:function (dialog)   {
+			this.setInert(false);
+			this.showDialog[dialog] = false;
+		},
+
+		//-------------------------------------------------------------------------
+		// 仕入先
+		//-------------------------------------------------------------------------
+    // ダイアログ選択値の格納、ダイアログを閉じる
+    selectSupplierDialog: function(supplierCodes){
+      this.supplierCode = supplierCodes;
+      this.closeDialog('SupplierSearch');
+      this.supplierChange();
+      this.$nextTick(() => this.moveToNextField('supplierCode'));
+    },
+    // 仕入先変更(フォーカス外れ時イベント)
+    supplierChange: async function(){
+
+      // 桁数が4桁の場合は営業所コードを付ける。
+      if (this.supplierCode.length == 4) { this.supplierCode = '148' + this.supplierCode; }
+
+      // 仕入先名の検索・表示
+      var that = this;
+      var targetSuppliers = this.mstSuppliers.filter(function(row){ return row.CODE == that.supplierCode ? true : false; });
+      if (targetSuppliers.length > 0){
+        this.supplierName = targetSuppliers[0].NAME;
+      } else {
+        this.supplierName = "";
+      }
+
+      // 商品マスタの再取得が必要ないのなら、コードのリセットはいらない
+      // 履歴の検索
+      this.search();
+      this.setNextField();
+      // // 仕入先が変化したので、商品リストを再取得
+      // await axios.post("/api/master/items", { 'searchSupplierCode' : this.supplierCode }).then(response => { this.mstItem = response.data; });
+      // // 商品コードのリセット
+      // this.itemCode = null;
+      // this.itemChange();
+
+    },
+
+		//-------------------------------------------------------------------------
+		// 倉庫
+		//-------------------------------------------------------------------------
+    // ダイアログ選択値の格納、ダイアログを閉じる
+    selectWarehouseDialog: function(warehouseCodes){
+      this.warehouseCode = warehouseCodes;
+      this.closeDialog('WarehouseSearch');
+      this.warehouseChange();
+      this.$nextTick(() => this.moveToNextField('warehouseCode'));
+    },
+    // 倉庫変更(フォーカス外れ時イベント)
+    warehousesChange: async function(){
+
+      // 桁数が4桁の場合は営業所コードを付ける。
+      if (this.warehouseCode.length == 4) { this.warehouseCode = '148' + this.warehouseCode; }
+
+      // 倉庫名の検索・表示
+      var that = this;
+      var targetWarehouses = this.mstWarehouses.filter(function(row){ return row.CODE == that.warehouseCode ? true : false; });
+      if (targetWarehouses.length > 0){
+        this.warehouseName = targetWarehouses[0].NAME;
+      } else {
+        this.warehouseName = "";
+      }
+
+      // 商品マスタの再取得が必要ないのなら、コードのリセットはいらない
+      // 履歴の検索
+      this.search();
+      this.setNextField();
+      // // 倉庫が変化した場合、商品リストはなにも基準に変化するのか?
+      // // 一旦なにもない状態で再取得を行う。
+      // await axios.post("/api/master/items", { }).then(response => { this.mstItem = response.data; });
+      // // 商品コードのリセット
+      // this.itemCode = null;
+      // this.itemChange();
+
+    },
+
+		//-------------------------------------------------------------------------
+		// 商品
+		//-------------------------------------------------------------------------
+    // 商品ダイアログで選択した得意先を格納してダイアログを閉じる
+    selectItemDialog: function(item){
+      this.itemCode=item.CODE;
+      this.closeDialog('ItemSearch');
+      this.itemChange();
+      this.$nextTick(() => this.moveToNextField('itemCode'));
+    },
+    // 商品変更(フォーカス外れ時イベント)
+    itemChange: async function(){
+
+      // 商品名の検索・表示
+      var that = this;
+      var targetItems = this.mstItem.filter(function(row){ return row.CODE == that.itemCode ? true : false; });
+      if (targetItems.length > 0){
+        this.itemName   = targetItems[0].NAME;
+        this.qtyPer     = targetItems[0].QTY_PER_CTN;
+        this.qtyPerOrg  = targetItems[0].QTY_PER_CTN;
+        this.pattern    = "A";
+      } else {
+        this.itemName   = "";
+        this.qtyPer     = "";
+        this.qtyPerOrg  = "";
+        this.pattern    = "";
+      }
+
+      // 入数
+      this.qtyPerChange();
+
+      // 履歴の検索
+      this.search();
+      this.setNextField();
+    },
+
+    // 入数変更(フォーカス外れ時イベント)
+    qtyPerChange:function() {
+      this.qtyPer = this.changeNumber(this.qtyPer);
+      this.qtyPerOrg = this.changeNumber(this.qtyPerOrg);
+
+      // デフォルト数と異なる場合
+      if (this.qtyPer != this.qtyPerOrg) {
+        $('#div_qtyPer').css("background-color", "Yellow");
+      } else {
+        $('#div_qtyPer').css("background-color", "#eeeeee");
+      }
+      this.setNextField();
+    },
+
 
     //QRコードラベルの印刷
     qrPrint: async function(){
 
       // 最後に最新の連番を取得しなおす。
-      await axios.post("api/serialNumberChange", { "printDate" : this.printDate }).then (response =>{
+      await axios.post("api/qrPrint/getSerialNumber", { "printDate" : this.printDate }).then (response =>{
         this.lotSeq = response.data.lotSeq;
       });
       
@@ -369,12 +513,17 @@ export default {
         var printResultID = response.data.printResultID;
 
         axios.get("api/resetSession/",{}).then (response =>{
-          
           // 印刷
-          window.open("/qrPrint/" + printResultID, "印刷ページ");
-          // 最新連番取得
-          axios.post("api/serialNumberChange", { "printDate" : this.printDate }).then (response =>{ this.lotSeq = response.data.lotSeq; });
-
+          const printWindow = window.open("/qrPrint/" + printResultID, "印刷ページ");
+          // 再描画のタイミングズレの吸収
+          this.$nextTick(() => {
+            axios.post("api/qrPrint/getSerialNumber", { "printDate" : this.printDate }).then (response =>{ 
+              // 最新連番取得
+              this.lotSeq = response.data.lotSeq;
+              // 履歴の検索
+              this.search();
+            });
+          });
         });
       });
     },
@@ -399,19 +548,24 @@ export default {
         var printResultID = response.data.printResultID;
 
         axios.get("api/resetSession/",{}).then (response =>{
-
           // 印刷
-          window.open("/qrPrint/" + printResultID, "印刷ページ");
-          // 最新連番取得
-          axios.post("api/serialNumberChange", { "printDate" : this.printDate }).then (response =>{ this.lotSeq = response.data.lotSeq; });
-
+          const printWindow = window.open("/qrPrint/" + printResultID, "印刷ページ");
+          // 再描画のタイミングズレの吸収
+          this.$nextTick(() => {
+            axios.post("api/qrPrint/getSerialNumber", { "printDate" : this.printDate }).then (response =>{ 
+              // 最新連番取得
+              this.lotSeq = response.data.lotSeq;
+              // 履歴の検索
+              this.search();
+            });
+          });
         });
       });
     },
 
     // 日付変更(フォーカス外れ時イベント)
     printDateChange : async function(){
-      await axios.post("api/serialNumberChange", { "printDate" : this.printDate }).then (response =>{
+      await axios.post("api/qrPrint/getSerialNumber", { "printDate" : this.printDate }).then (response =>{
         this.lotSeq = response.data.lotSeq;
       });
 
@@ -419,6 +573,7 @@ export default {
 
       // 履歴の検索
       this.search();
+      this.setNextField();
     },
 
     // 連番を0詰めする
@@ -427,121 +582,6 @@ export default {
       if (lotSeq == 0) { lotSeq = 1; }
       lotSeq = ('000000' + lotSeq).slice(-6);
       return lotSeq;
-    },
-
-    // 仕入先変更(フォーカス外れ時イベント)
-    supplierChange: async function(){
-
-      // 桁数が4桁の場合は営業所コードを付ける。
-      if (this.supplierCode.length == 4) { this.supplierCode = '148' + this.supplierCode; }
-
-      // 仕入先名の検索・表示
-      var that = this;
-      var targetSuppliers = this.mstSuppliers.filter(function(row){ return row.CODE == that.supplierCode ? true : false; });
-      if (targetSuppliers.length > 0){
-        this.supplierName = targetSuppliers[0].NAME;
-      } else {
-        this.supplierName = "";
-      }
-
-      // 商品マスタの再取得が必要ないのなら、コードのリセットはいらない
-      // 履歴の検索
-      this.search();
-
-      // // 仕入先が変化したので、商品リストを再取得
-      // await axios.post("/api/master/items", { 'searchSupplierCode' : this.supplierCode }).then(response => { this.mstItem = response.data; });
-      // // 商品コードのリセット
-      // this.itemCode = null;
-      // this.itemChange();
-
-    },
-
-    // 倉庫変更(フォーカス外れ時イベント)
-    warehousesChange: async function(){
-
-      // 桁数が4桁の場合は営業所コードを付ける。
-      if (this.warehouseCode.length == 4) { this.warehouseCode = '148' + this.warehouseCode; }
-
-      // 倉庫名の検索・表示
-      var that = this;
-      var targetWarehouses = this.mstWarehouses.filter(function(row){ return row.CODE == that.warehouseCode ? true : false; });
-      if (targetWarehouses.length > 0){
-        this.warehouseName = targetWarehouses[0].NAME;
-      } else {
-        this.warehouseName = "";
-      }
-
-      // 商品マスタの再取得が必要ないのなら、コードのリセットはいらない
-      // 履歴の検索
-      this.search();
-
-      // // 倉庫が変化した場合、商品リストはなにも基準に変化するのか?
-      // // 一旦なにもない状態で再取得を行う。
-      // await axios.post("/api/master/items", { }).then(response => { this.mstItem = response.data; });
-      // // 商品コードのリセット
-      // this.itemCode = null;
-      // this.itemChange();
-
-    },
-
-    // ダイアログ選択値の格納、ダイアログを閉じる
-    selectSupplierDialog: function(supplierCodes){
-      this.supplierCode = supplierCodes;
-      this.closeSupplierSearchDialog();
-      this.warehousesChange();
-    },
-
-
-    // ダイアログ選択値の格納、ダイアログを閉じる
-    selectWarehouseDialog: function(warehouseCodes){
-      this.warehouseCode = warehouseCodes;
-      this.closeWarehouseSearchDialog();
-      this.warehouseChange();
-    },
-
-    // 商品変更(フォーカス外れ時イベント)
-    itemChange: async function(){
-
-      // 商品名の検索・表示
-      var that = this;
-      var targetItems = this.mstItem.filter(function(row){ return row.CODE == that.itemCode ? true : false; });
-      if (targetItems.length > 0){
-        this.itemName   = targetItems[0].NAME;
-        this.qtyPer     = targetItems[0].QTY_PER_CTN;
-        this.qtyPerOrg  = targetItems[0].QTY_PER_CTN;
-        this.pattern    = "A";
-      } else {
-        this.itemName   = "";
-        this.qtyPer     = "";
-        this.qtyPerOrg  = "";
-        this.pattern    = "";
-      }
-
-      // 入数
-      this.qtyPerChange();
-
-      // 履歴の検索
-      this.search();
-    },
-
-    // 商品ダイアログで選択した得意先を格納してダイアログを閉じる
-    selectItemDialog: function(item){
-      this.itemCode=item.CODE;
-      this.closeItemSearchDialog();
-      this.itemChange();
-    },
-
-    // 入数変更(フォーカス外れ時イベント)
-    qtyPerChange:function() {
-      this.qtyPer = this.changeNumber(this.qtyPer);
-      this.qtyPerOrg = this.changeNumber(this.qtyPerOrg);
-
-      // デフォルト数と異なる場合
-      if (this.qtyPer != this.qtyPerOrg) {
-        $('#div_qtyPer').css("background-color", "Yellow");
-      } else {
-        $('#div_qtyPer').css("background-color", "#eeeeee");
-      }
     },
 
     // その他--------------------------------------------------------------------------------
@@ -593,7 +633,7 @@ export default {
         this.qrRecords = response.data;
         this.pageNow = 1;
         this.pageCount = Math.ceil(this.qrRecords.length / this.pageDataCount);
-
+        this.setNextField()
       });
     },
 
@@ -602,12 +642,47 @@ export default {
       this.sortKey = sortKey;
       this.sortOrder = sortOrder;
     },
+    
+		//---------------------------------------------------------------------
+		// タブキーorEnterキー
+		//---------------------------------------------------------------------
+		setNextField() {
+			// Enter移動の設定をする
+			this.nextFields = []
+			this.nextFields.push({ 'id':'printButton', 'disabled': (this.printDate == '' || (this.supplierCode == '' && this.warehouseCode == '') || this.itemCode == '' || this.qtyPer == '' || this.pattern == '' || this.numSheet == ''), });
+			this.nextFields.push({ 'id':'printDate', 'disabled': false, });
+      this.nextFields.push({ 'id':'supplierCode', 'disabled': (this.warehouseCode != '' && this.warehouseCode != null), });
+			this.nextFields.push({ 'id':'warehouseCode', 'disabled': (this.supplierCode != '' && this.supplierCode != null), });
+			this.nextFields.push({ 'id':'itemCode', 'disabled': false, });
+			this.nextFields.push({ 'id':'qtyPer', 'disabled': false, });
+			this.nextFields.push({ 'id':'pattern', 'disabled': false, });
+			this.nextFields.push({ 'id':'numSheet', 'disabled': false, });
+			this.nextFields.push({ 'id':'startNum', 'disabled': false, });
+      this.nextFields.push({ 'id':'printButtonRe', 'disabled': (this.qrRecords == null || this.qrRecords.length==0), });
+		},
+		moveToNextField(nowField) {
+			var nextField = ""
+			var index = this.nextFields.findIndex(field => field.id === nowField);
+			for (var i = 0; i < this.nextFields.length; i++) {
+				if (index < (this.nextFields.length - 1)) { index++ } else { index = 0 }
+				var record = this.nextFields[index]
+				if (!record.disabled) {
+					nextField = record.id
+					break;
+				}
+			}
+			if (nextField) {
+				// this.$refs[nextField].focus();
+				if (this.$refs[nextField]) {
+					if (Array.isArray(this.$refs[nextField])) {
+						this.$refs[nextField][0].focus();
+					} else {
+						this.$refs[nextField].focus();
+					}
+				}
+			}
+		},
 
-    pdfPrint : async function(pdfName) {
-      await axios.get("api/resetSession" , {}).then (response =>{
-        window.open("/pdfPrint/" + pdfName, "印刷ページ");
-      });
-    },
   },
 
  computed : {
@@ -710,6 +785,9 @@ export default {
   }
   div.sortSelect {
     color: #ff0000;
+  }
+  .searchResult {
+    height: 360px;
   }
 </style>
 

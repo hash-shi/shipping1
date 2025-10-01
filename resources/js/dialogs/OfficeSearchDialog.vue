@@ -30,18 +30,25 @@
               <button style="width:100px;height: 32px;" v-on:click="search" :ref="'office_search'" @keyup.enter="moveToNextField('office_search')">検索</button>
             </div>
           </div>
-          <table class="searchResult">
-            <tr>
-              <th class="w100 left">コード</th>
-              <th class="left">名称</th>
-              <th class="left">カナ</th>
-            </tr>
-            <tr v-for="result in results" :key="result.CODE">
-              <td class="w100"><div style="text-decoration: underline;cursor:pointer;" v-on:click="select(result.CODE)">{{ result.CODE }}</div></td>
-              <td>{{ result.NAME }}</td>
-              <td>{{ result.NAME1 }}</td>
-            </tr>
-          </table>
+
+          <div class="searchResult">
+            <table class="searchRecord">
+              <thead>
+                <tr>
+                  <th class="w100 left">コード</th>
+                  <th class="left">名称</th>
+                  <th class="left">カナ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="result in results" :key="result.CODE">
+                  <td class="w100"><div style="text-decoration: underline;cursor:pointer;" v-on:click="select(result.CODE)">{{ result.CODE }}</div></td>
+                  <td>{{ result.NAME }}</td>
+                  <td>{{ result.NAME1 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
         </div>
       </div>
@@ -97,33 +104,33 @@ export default {
     setNextField() {
       // Enter移動の設定をする
       this.nextFields = []
-      this.nextFields.push({ 'id':'office_officeCode', 'disabled': false, });
-      this.nextFields.push({ 'id':'office_officeKana', 'disabled': false, });
-      this.nextFields.push({ 'id':'office_officeName', 'disabled': false, });
-      this.nextFields.push({ 'id':'office_search', 'disabled': false, });
+			this.nextFields.push({ 'id':'office_officeCode', 'disabled': false, });
+			this.nextFields.push({ 'id':'office_officeKana', 'disabled': false, });
+			this.nextFields.push({ 'id':'office_officeName', 'disabled': false, });
+			this.nextFields.push({ 'id':'office_search', 'disabled': false, });
     },
-    moveToNextField(nowField) {
-      var nextField = ""
-      var index = this.nextFields.findIndex(field => field.id === nowField);
-      for (var i = 0; i < this.nextFields.length; i++) {
-        if (index < (this.nextFields.length - 1)) { index++ } else { index = 0 }
-        var record = this.nextFields[index]
-        if (!record.disabled) {
-          nextField = record.id
-          break;
-        }
-      }
-      if (nextField) {
-        // this.$refs[nextField].focus();
-        if (this.$refs[nextField]) {
-          if (Array.isArray(this.$refs[nextField])) {
-            this.$refs[nextField][0].focus();
-          } else {
-            this.$refs[nextField].focus();
-          }
-        }
-      }
-    },
+		moveToNextField(nowField) {
+			var nextField = ""
+			var index = this.nextFields.findIndex(field => field.id === nowField);
+			for (var i = 0; i < this.nextFields.length; i++) {
+				if (index < (this.nextFields.length - 1)) { index++ } else { index = 0 }
+				var record = this.nextFields[index]
+				if (!record.disabled) {
+					nextField = record.id
+					break;
+				}
+			}
+			if (nextField) {
+				// this.$refs[nextField].focus();
+				if (this.$refs[nextField]) {
+					if (Array.isArray(this.$refs[nextField])) {
+						this.$refs[nextField][0].focus();
+					} else {
+						this.$refs[nextField].focus();
+					}
+				}
+			}
+		},
   },
   //-------------------------------------------------------------------------
   // 初期処理
@@ -139,4 +146,7 @@ export default {
 }
 </script>
 <style scoped>
+  .searchResult {
+    height: 390px;
+  }
 </style>

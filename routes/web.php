@@ -14,11 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 //印刷系統
-Route::get('/shipping/instructionPrint/{orderNo}'                   , "App\Http\Controllers\api\ShippingController@instructionPrint");
-Route::get('/shipping/slipPrint/{orderNo}'                          , "App\Http\Controllers\api\ShippingController@slipPrint");
+Route::get('/shipping/detail/instructions/{orderNo}'                   , "App\Http\Controllers\api\ShippingController@instructionPrint");
+Route::get('/shipping/detail/slip/{orderNo}'                          , "App\Http\Controllers\api\ShippingController@slipPrint");
 
 Route::get('/qrPrint/{printResultID}'	                              , "App\Http\Controllers\api\QrprintController@qrPrint");
-Route::get('/pdfPrint/{pdfName}'                                    , "App\Http\Controllers\api\QrprintController@pdfPrint");
 
 Route::get('/401', 'App\Http\Controllers\PagesController@error401');
 Route::get('/{any}', 'App\Http\Controllers\PagesController@index')->where('any', '.*');
