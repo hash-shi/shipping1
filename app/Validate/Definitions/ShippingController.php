@@ -62,11 +62,30 @@ class ShippingController extends ValidateDefinitionsBase {
 			'sidRecords.*.QTY_PER_CTN'     => ['required_with:sidRecords.*.ITEM_CODE'],
 			'sidRecords.*.QTY_CTN'         => ['required_with:sidRecords.*.ITEM_CODE'],
 		],
+		// 在庫調整用
+		"susp_"  => [
+			'sihRecord.ORDER_NO'           => ['required'],
+			'sihRecord.SHIP_DATE'          => ['required'],
+			'sihRecord.DELIVERY_CODE'      => ['nullable', 'exists:warehouses,CODE'],
+			'sidRecords.*.HCODE'           => ['required_with:sidRecords.*.ITEM_CODE', 'nullable', 'exists:hcodesD,CODE'],
+			'sidRecords.*.ITEM_CODE'       => ['required_with:sidRecords.*.HCODE','required_with:sidRecords.*.QTY_PER_CTN','required_with:sidRecords.*.QTY_CTN',],
+			'sidRecords.*.QTY_PER_CTN'     => ['required_with:sidRecords.*.ITEM_CODE'],
+			'sidRecords.*.QTY_CTN'         => ['required_with:sidRecords.*.ITEM_CODE'],
+		],
+		// 在庫調整用
+		"conf_"  => [
+			'sihRecord.ORDER_NO'           => ['required'],
+			'sihRecord.SHIP_DATE'          => ['required'],
+			'sihRecord.DELIVERY_CODE'      => ['nullable', 'exists:warehouses,CODE'],
+			'sidRecords.*.HCODE'           => ['required_with:sidRecords.*.ITEM_CODE', 'nullable', 'exists:hcodesD,CODE'],
+			'sidRecords.*.ITEM_CODE'       => ['required_with:sidRecords.*.HCODE','required_with:sidRecords.*.QTY_PER_CTN','required_with:sidRecords.*.QTY_CTN',],
+			'sidRecords.*.QTY_PER_CTN'     => ['required_with:sidRecords.*.ITEM_CODE'],
+			'sidRecords.*.QTY_CTN'         => ['required_with:sidRecords.*.ITEM_CODE'],
+		],
 		"exis" => [
 			'ORDER_NO'                     => ['required', 'numeric', 'min:1', 'max:999998'],
 		],
 	);
-
 
 	//-----------------------------------------------------
 	// 入力値チェックのメッセージ定義

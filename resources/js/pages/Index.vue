@@ -84,80 +84,80 @@
         <table class="searchRecord">
           <thead>
             <tr>
-          <th class="w110">
-            受注No
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='ORDER_NO'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('ORDER_NO', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='ORDER_NO'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('ORDER_NO', 'asc')" /></div>
-            </div>
-          </th>
-          <th class="w100">
-            取区
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='HCODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('HCODE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='HCODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('HCODE', 'asc')" /></div>
-            </div>
-          </th>
-          <th class="w100">
-            出荷日
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='SHIP_DATE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('SHIP_DATE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='SHIP_DATE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('SHIP_DATE', 'asc')" /></div>
-            </div>
-          </th>
-          <th class="w100">
-            納品日
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='DELIVERY_DATE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('DELIVERY_DATE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='DELIVERY_DATE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('DELIVERY_DATE', 'asc')" /></div>
-            </div>
-          </th>
-          <th>
-            得意先
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='CUSTOMER_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('CUSTOMER_CODE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='CUSTOMER_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('CUSTOMER_CODE', 'asc')" /></div>
-            </div>
-          </th>
-          <th>
-            納入先
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='DELIVERY_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('DELIVERY_CODE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='DELIVERY_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('DELIVERY_CODE', 'asc')" /></div>
-            </div>
-          </th>
-          <th>
-            運転手
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='DRIVER_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('DRIVER_CODE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='DRIVER_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('DRIVER_CODE', 'asc')" /></div>
-            </div>
-          </th>
-          <th>
-            便区分
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='FLIGHTS'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('FLIGHTS', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='FLIGHTS'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('FLIGHTS', 'asc')" /></div>
-            </div>
-          </th>
-          <th>
-            仕入先
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='SUPPLIER_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('SUPPLIER_CODE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='SUPPLIER_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('SUPPLIER_CODE', 'asc')" /></div>
-            </div>
-          </th>
-          <th>
-            倉庫
-            <div class="sort">
-              <div class="down" v-bind:class="{sortSelect:sortKey=='WAREHOUSE_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('WAREHOUSE_CODE', 'desc')" /></div>
-              <div class="up"   v-bind:class="{sortSelect:sortKey=='WAREHOUSE_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('WAREHOUSE_CODE', 'asc')" /></div>
-            </div>
-          </th>
-          <th class="w40">S</th>
-          <th class="w40">付</th>
-          <th class="w90">入力確定</th>
-          <th class="w90">出荷実績日</th>
+              <th class="w110">
+                受注No
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='ORDER_NO'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('ORDER_NO', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='ORDER_NO'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('ORDER_NO', 'asc')" /></div>
+                </div>
+              </th>
+              <th class="w100">
+                取区
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='HCODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('HCODE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='HCODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('HCODE', 'asc')" /></div>
+                </div>
+              </th>
+              <th class="w100">
+                出荷日
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='SHIP_DATE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('SHIP_DATE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='SHIP_DATE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('SHIP_DATE', 'asc')" /></div>
+                </div>
+              </th>
+              <th class="w100">
+                納品日
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='DELIVERY_DATE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('DELIVERY_DATE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='DELIVERY_DATE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('DELIVERY_DATE', 'asc')" /></div>
+                </div>
+              </th>
+              <th>
+                得意先
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='CUSTOMER_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('CUSTOMER_CODE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='CUSTOMER_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('CUSTOMER_CODE', 'asc')" /></div>
+                </div>
+              </th>
+              <th>
+                納入先
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='DELIVERY_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('DELIVERY_CODE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='DELIVERY_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('DELIVERY_CODE', 'asc')" /></div>
+                </div>
+              </th>
+              <th>
+                運転手
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='DRIVER_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('DRIVER_CODE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='DRIVER_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('DRIVER_CODE', 'asc')" /></div>
+                </div>
+              </th>
+              <th>
+                便区分
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='FLIGHTS'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('FLIGHTS', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='FLIGHTS'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('FLIGHTS', 'asc')" /></div>
+                </div>
+              </th>
+              <th>
+                仕入先
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='SUPPLIER_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('SUPPLIER_CODE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='SUPPLIER_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('SUPPLIER_CODE', 'asc')" /></div>
+                </div>
+              </th>
+              <th>
+                倉庫
+                <div class="sort">
+                  <div class="down" v-bind:class="{sortSelect:sortKey=='WAREHOUSE_CODE'&&sortOrder=='desc'}"><font-awesome-icon icon="sort-amount-down" v-on:click="setSort('WAREHOUSE_CODE', 'desc')" /></div>
+                  <div class="up"   v-bind:class="{sortSelect:sortKey=='WAREHOUSE_CODE'&&sortOrder=='asc' }"><font-awesome-icon icon="sort-amount-up-alt" v-on:click="setSort('WAREHOUSE_CODE', 'asc')" /></div>
+                </div>
+              </th>
+              <th class="w40">S</th>
+              <th class="w40">付</th>
+              <th class="w90">入力確定</th>
+              <th class="w90">出荷実績日</th>
               <th class="w50"></th>
             </tr>
           </thead>
@@ -165,88 +165,98 @@
             <!-- sihRecords pageResults-->
             <tr v-for="(sihRecord, index) of pageResults" :key="index" v-bind:class="{ 'hasKARI': hasKARI(sihRecord.KARI) }">
               <!-- 受注No -->
-          <td class="center" style="height: 46px;text-decoration: underline;color: #0000ff;">
-            <div title="編集画面へ" style="cursor:pointer;" v-on:click="detail(sihRecord.ORDER_NO)">{{ sihRecord.ORDER_NO }}</div>
-          </td>
-          <!-- 取区 -->
-          <td class="center">
-            {{ sihRecord.HNAME }}
-          </td>
-          <!-- 出荷日 -->
-          <td class="center">
-            {{ toDate(sihRecord.SHIP_DATE) }}
-          </td>
-          <!-- 納品日 -->
-          <td class="center">
-            {{ toDate(sihRecord.DELIVERY_DATE) }}
-          </td>
-          <!-- 得意先 -->
-          <td>
-            {{ sihRecord.CUSTOMER_CODE }}<br />{{ sihRecord.CUSTOMER_NAME }}
-          </td>
-          <!-- 納入先 -->
-          <td>
-            {{ sihRecord.DELIVERY_CODE }}<br />{{ sihRecord.DELIVERY_NAME }}
-          </td>
+              <td class="center" style="height: 46px;text-decoration: underline;color: #0000ff;">
+                <!-- <div title="編集画面へ" style="cursor:pointer;" v-on:click="detail(sihRecord.SIH_ID)">{{ sihRecord.ORDER_NO }}</div> -->
+                <div title="編集画面へ" style="cursor:pointer;" v-on:click="detail(sihRecord.ORDER_NO)">{{ sihRecord.ORDER_NO }}</div>
+              </td>
+              <!-- 取区 -->
+              <td class="center">
+                {{ sihRecord.HNAME }}
+              </td>
+              <!-- 出荷日 -->
+              <td class="center">
+                {{ toDate(sihRecord.SHIP_DATE) }}
+              </td>
+              <!-- 納品日 -->
+              <td class="center">
+                {{ toDate(sihRecord.DELIVERY_DATE) }}
+              </td>
+              <!-- 得意先 -->
+              <td>
+                {{ sihRecord.CUSTOMER_CODE }}<br />{{ sihRecord.CUSTOMER_NAME }}
+              </td>
+              <!-- 納入先 -->
+              <td>
+                {{ sihRecord.DELIVERY_CODE }}<br />{{ sihRecord.DELIVERY_NAME }}
+              </td>
+
               <!-- 運転手 -->
-              <td v-bind:class="{nothing: sihRecord.DRIVER_CODE=='' || sihRecord.DRIVER_CODE==null}">
-                <input type="text" autocomplete="off" size="4" :value="sihRecord.DRIVER_CODE | upperCase" @input.lazy="sihRecord.DRIVER_CODE = ($event.target.value).toUpperCase()" v-on:keyup="driverC2N(index)" v-on:blur="driverBlur(index);" :ref="'driver_' + index" @keyup.enter="moveToNextField('driver_' + index)">
-          <!-- <input type="text" autocomplete="off" size="16" list="items_rel" :value="sidRecord.ITEM_CODE | upperCase" @input.lazy="sidRecord.ITEM_CODE = ($event.target.value).toUpperCase()" v-on:keyup="itemC2N(index)" v-on:blur="itemBlur(index);" :ref="'itemCode_' + index" @keyup.enter="moveToNextField('itemCode_' + index)"> -->
-                <font-awesome-icon icon="times" v-on:click="sihRecord.DRIVER_CODE='';driverBlur(index);" style="cursor:pointer;" />
-                <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="showDialog.DriverSearchIndex=index;opneDialog('DriverSearch')" />
-                <br />
-            {{ sihRecord.DRIVER_NAME }}
-          </td>
-          <!-- 便区分 -->
-          <td v-bind:class="{nothing: sihRecord.FLIGHTS=='' || sihRecord.FLIGHTS==null}">
-            <input type="text" autocomplete="off" :ref="'flights_' + index" size="1" v-model="sihRecord.FLIGHTS" @keyup.enter="moveToNextField('flights_' + index)">
-          </td>
-          <!-- 仕入先 -->
-          <td>
-            {{ sihRecord.SUPPLIER_CODE }}<br />{{ sihRecord.SUPPLIER_NAME }}
-          </td>
-          <!-- 倉庫 -->
-          <td>
-            {{ sihRecord.WAREHOUSE_CODE }}<br />{{ sihRecord.WAREHOUSE_NAME }}
-          </td>
-          <!-- S -->
-          <td class="center" v-bind:class="{complete: sihRecord.STATUS=='2'}">
-            {{ toStatus(sihRecord.STATUS) }}
-          </td>
-          <!-- 付 -->
-          <td class="center" v-bind:class="{hasTag: sihRecord.TAG_NOTE!=''&&sihRecord.TAG_NOTE!=null}">
-            <div style="position:relative;cursor:help;" v-if="sihRecord.TAG_NOTE!=''&&sihRecord.TAG_NOTE!=null" v-on:mouseover="showTagNote" v-on:mouseout="hideTagNote">
-              <div class="fukidashiTagNote">{{ sihRecord.TAG_NOTE }}</div>
-              <font-awesome-icon icon="comment" />
-            </div>
-          </td>
-          <!-- 入力確定 -->
-          <td class="center">
-            <div style="position:relative;cursor:pointer;" v-if="sihRecord.CONFIRM_DATE!=''&&sihRecord.CONFIRM_DATE!=null" v-on:mouseover="showConfirmDate" v-on:mouseout="hideConfirmDate">
-              {{ toMonthDay(sihRecord.CONFIRM_DATE)}} 
-              <div class="datesNote">
-                確定時刻：{{ toDateTime(sihRecord.CONFIRM_DATE) }}
-                <br>
-                受発注者：{{ sihRecord.NAME }}
-              </div>
-            </div>
-          </td>
-          <!-- 出荷実績日 -->
-          <td v-bind:class="{difference: sihRecord.QTY != sihRecord.QTY_RESULT &&( sihRecord.QTY_RESULT !='' && sihRecord.QTY_RESULT !=null)}">
-            <div style="position:relative;cursor:pointer;" v-if="sihRecord.SHIP_DATE_RESULT!=''&&sihRecord.SHIP_DATE_RESULT!=null" v-on:mouseover="showConfirmDate" v-on:mouseout="hideConfirmDate">
-              {{ toDateTime(sihRecord.SHIP_DATE_RESULT) }}
-              <div class="datesNote">
-                QTY：{{ sihRecord.QTY }}
-                <br>
-                QTY_RESULT：{{ sihRecord.QTY_RESULT }}
-                <br>
-                modified：{{ toDateTime(sihRecord.modified) }}
-              </div>
-            </div>
+              <td v-bind:class="{nothing: sihRecord.HCODE!='7' && (sihRecord.DRIVER_CODE=='' || sihRecord.DRIVER_CODE==null)}">
+                <div v-if="sihRecord.HCODE!='7'">
+                  <input type="text" autocomplete="off" size="4" :value="sihRecord.DRIVER_CODE | upperCase" @input.lazy="sihRecord.DRIVER_CODE = ($event.target.value).toUpperCase()" v-on:keyup="driverC2N(index)" v-on:blur="driverBlur(index);" :ref="'driver_' + index" @keyup.enter="moveToNextField('driver_' + index)">
+                  <!-- <input type="text" autocomplete="off" size="16" list="items_rel" :value="sidRecord.ITEM_CODE | upperCase" @input.lazy="sidRecord.ITEM_CODE = ($event.target.value).toUpperCase()" v-on:keyup="itemC2N(index)" v-on:blur="itemBlur(index);" :ref="'itemCode_' + index" @keyup.enter="moveToNextField('itemCode_' + index)"> -->
+                  <font-awesome-icon icon="times" v-on:click="sihRecord.DRIVER_CODE='';driverBlur(index);" style="cursor:pointer;" />
+                  <font-awesome-icon icon="search" style="cursor:pointer;" v-on:click="showDialog.DriverSearchIndex=index;opneDialog('DriverSearch')" />
+                  <br />
+                  {{ sihRecord.DRIVER_NAME }}
+                </div>
+              </td>
+
+              <!-- 便区分 -->
+              <td v-bind:class="{nothing: sihRecord.HCODE!='7' && (sihRecord.FLIGHTS=='' || sihRecord.FLIGHTS==null)}">
+                <div v-if="sihRecord.HCODE!='7'">
+                  <input type="text" autocomplete="off" :ref="'flights_' + index" size="1" v-model="sihRecord.FLIGHTS" @keyup.enter="moveToNextField('flights_' + index)">
+                </div>
+              </td>
+
+              <!-- 仕入先 -->
+              <td>
+                {{ sihRecord.SUPPLIER_CODE }}<br />{{ sihRecord.SUPPLIER_NAME }}
+              </td>
+              <!-- 倉庫 -->
+              <td>
+                {{ sihRecord.WAREHOUSE_CODE }}<br />{{ sihRecord.WAREHOUSE_NAME }}
+              </td>
+              <!-- S -->
+              <td class="center" v-bind:class="{complete: sihRecord.STATUS=='2'}">
+                {{ toStatus(sihRecord.STATUS) }}
+              </td>
+              <!-- 付 -->
+              <td class="center" v-bind:class="{hasTag: sihRecord.TAG_NOTE!=''&&sihRecord.TAG_NOTE!=null}">
+                <div style="position:relative;cursor:help;" v-if="sihRecord.TAG_NOTE!=''&&sihRecord.TAG_NOTE!=null" v-on:mouseover="showTagNote" v-on:mouseout="hideTagNote">
+                  <div class="fukidashiTagNote">{{ sihRecord.TAG_NOTE }}</div>
+                  <font-awesome-icon icon="comment" />
+                </div>
+              </td>
+              <!-- 入力確定 -->
+              <td class="center">
+                <div style="position:relative;cursor:pointer;" v-if="sihRecord.CONFIRM_DATE!=''&&sihRecord.CONFIRM_DATE!=null" v-on:mouseover="showConfirmDate" v-on:mouseout="hideConfirmDate">
+                  {{ toMonthDay(sihRecord.CONFIRM_DATE)}} 
+                  <div class="datesNote">
+                    確定時刻：{{ toDateTime(sihRecord.CONFIRM_DATE) }}
+                    <br>
+                    受発注者：{{ sihRecord.NAME }}
+                  </div>
+                </div>
+              </td>
+              <!-- 出荷実績日 -->
+              <td v-bind:class="{difference: sihRecord.QTY != sihRecord.QTY_RESULT &&( sihRecord.QTY_RESULT !='' && sihRecord.QTY_RESULT !=null)}">
+                <div style="position:relative;cursor:pointer;" v-if="sihRecord.SHIP_DATE_RESULT!=''&&sihRecord.SHIP_DATE_RESULT!=null" v-on:mouseover="showConfirmDate" v-on:mouseout="hideConfirmDate">
+                  {{ toDateTime(sihRecord.SHIP_DATE_RESULT) }}
+                  <div class="datesNote">
+                    QTY：{{ sihRecord.QTY }}
+                    <br>
+                    QTY_RESULT：{{ sihRecord.QTY_RESULT }}
+                    <br>
+                    modified：{{ toDateTime(sihRecord.modified) }}
+                  </div>
+                </div>
               </td>
               <!-- 更新 -->
               <td class="center">
-                <button type="button" ref="update" v-on:click="update(sihRecord)">更新</button>
+                <div v-if="sihRecord.HCODE!='7'">
+                  <button type="button" ref="update" v-on:click="update(sihRecord)">更新</button>
+                </div>
               </td>
             </tr>
           </tbody>

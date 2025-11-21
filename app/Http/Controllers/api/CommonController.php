@@ -109,4 +109,40 @@ class CommonController extends Controller
 		return $orderNo;
 	}
 
+	//-------------------------------------------------------------------------
+	// ORDER_NO
+	// 出荷指示の受注番号を採番
+	// (在庫調整用)
+	//-------------------------------------------------------------------------
+	public function getAdjustNo(Request $request){
+		
+		$orderNo = "900001";
+
+		// 採番最大値取得
+		$config = $this->getConfig($request);
+		$orderNoMax = $config[array_search('ADJUST_NO_MAX', array_column($config, 'ID'))]['VALUE'];
+
+		// 最新の受注番号を取得
+		$orderNoNext = $config[array_search('ADJUST_NO_NEXT', array_column($config, 'ID'))]['VALUE'];
+
+		// 受注番号を比較して格納
+		if (intval($orderNoNext) < intval($orderNoMax)) { $orderNo = $orderNoNext; }
+
+		// + 1して返却
+		// return sprintf('%06d', (intval($orderNo) + 1));
+		return sprintf('%06d', (intval($orderNo)));
+	}
+
+	//-------------------------------------------------------------------------
+	// ORDER_NO
+	// 出荷指示の登録時に最新番号を取り直す&+1値に更新する。
+	// 取り直した場合を考慮して最新番号を返却する。
+	// (在庫調整用)
+	//-------------------------------------------------------------------------
+	public function updAdjustNo(Request $request){
+		$orderNo = $this->getAdjustNo($request);
+		configures::where('ID', 'ADJUST_NO_NEXT')->update(['VALUE' => (intval($orderNo) + 1)]);
+		return $orderNo;
+	}
+
 }

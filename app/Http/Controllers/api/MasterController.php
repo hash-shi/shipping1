@@ -653,8 +653,6 @@ class MasterController extends Controller {
 				STEPS1,
 				STEPS2,
 				STEPS3,
-				HEIGHT,
-				MARGIN,
 				IMAGE,
 				ON_NOT_STOCK,
 				ON_PRINT,

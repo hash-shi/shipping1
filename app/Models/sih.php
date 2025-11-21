@@ -10,6 +10,7 @@ class sih extends Model
     // use HasFactory;
 
     protected $table            = 'SIH';
+    // protected $primaryKey       = 'SIH_ID';
     protected $primaryKey       = 'ORDER_NO';
     public $incrementing        = false;
     public $keyType             = "string";
@@ -17,6 +18,7 @@ class sih extends Model
     protected $guarded          = [];
 
     protected $casts = [
+        // 'SIH_ID' => 'int',
         'ORDER_NO' => 'string',
         'HCODE' => 'int',
         'OFFICE_CODE' => 'string',

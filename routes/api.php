@@ -28,6 +28,8 @@ Route::get('config'                                             , "App\Http\Cont
 Route::get('today'                                              , "App\Http\Controllers\api\CommonController@getToday");
 // 受注番号
 Route::get('orderNo'                                            , "App\Http\Controllers\api\CommonController@getOrderNo");
+Route::get('adjustNo'                                           , "App\Http\Controllers\api\CommonController@getAdjustNo");
+
 // 
 
 // 出荷指示関連
@@ -53,6 +55,8 @@ Route::post('shipping/detail/inst'                              , "App\Http\Cont
 Route::post('shipping/detail/slip'                              , "App\Http\Controllers\api\ShippingController@slip");
 Route::delete('shipping'                                        , "App\Http\Controllers\api\ShippingController@del");
 
+Route::post('shipping/detail/susp_'                             , "App\Http\Controllers\api\ShippingController@susp_");
+Route::post('shipping/detail/conf_'                             , "App\Http\Controllers\api\ShippingController@conf_");
 
 // マスタ取得
 Route::post('master/customers'                                   , "App\Http\Controllers\api\MasterController@getCustomers");

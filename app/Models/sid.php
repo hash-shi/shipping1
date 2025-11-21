@@ -14,6 +14,7 @@ class sid extends Model
     protected $guarded          = [];
 
     protected $casts = [
+        // 'SIH_ID' => 'int',
         'ORDER_NO' => 'string',
         'RNO' => 'int',
         'HCODE' => 'string',
