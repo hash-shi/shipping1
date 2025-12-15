@@ -35,7 +35,9 @@
             <div class="title">受注No.</div>
             <div class="value">
               <input type="text" size="10" v-model="ORDER_NO" ref="inputShipping_orderNo" @keyup.enter="moveToNextField('inputShipping_orderNo')">
+              在庫調整指示Noの最後:{{ this.ADJUST_NO_ }}
             </div>
+
           </div>
           <br />
           <div class="tv">
@@ -160,14 +162,14 @@ export default {
     // 受注No表示切替え
     //---------------------------------------------------------------------
     changeOrderNo(code) {
-      // 選択している取区に応じて表示する受注Noを切り替える。
-      if (code != '7') {
-        // 通常
-        this.ORDER_NO = this.ORDER_NO_;
-      } else {
-        // 在庫調整用
-        this.ORDER_NO = this.ADJUST_NO_;
-      }
+      // // 選択している取区に応じて表示する受注Noを切り替える。
+      // if (code != '7') {
+      //   // 通常
+      //   this.ORDER_NO = this.ORDER_NO_;
+      // } else {
+      //   // 在庫調整用
+      //   this.ORDER_NO = this.ADJUST_NO_;
+      // }
     },
   },
 
@@ -183,6 +185,11 @@ export default {
     await axios.post("/api/master/hcodesH", {})
     .then(response => { 
       this.HCODESH = response.data; 
+    });
+
+    await axios.get("/api/adjustNoMax", {})
+    .then(response => { 
+      this.ADJUST_NO_ = response.data; 
     });
 
     // // 受注NO(通常)
