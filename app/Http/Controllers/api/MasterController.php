@@ -656,8 +656,6 @@ class MasterController extends Controller {
 				STEPS1,
 				STEPS2,
 				STEPS3,
-				HEIGHT,
-				MARGIN,
 				IMAGE,
 				ON_NOT_STOCK,
 				ON_PRINT,
@@ -794,7 +792,7 @@ class MasterController extends Controller {
 				OFFICES
 			where
 				1 = 1
-			and CODE
+			and CODE = ?
 			order by
 				CODE
 		";
